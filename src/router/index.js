@@ -8,6 +8,16 @@ const routes = [
     component: Home
   },
   {
+    path: '/login',
+    name: 'Login',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Register.vue')
+  },
+  {
     path: '/dash',
     name: 'Dash',
     component: () => import(/* webpackChunkName: "about" */ '../views/Dash.vue')
@@ -26,6 +36,11 @@ const routes = [
     path: '/friends',
     name: 'Friends',
     component: () => import(/* webpackChunkName: "about" */ '../views/Friends.vue')
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Settings.vue')
   }
 ]
 

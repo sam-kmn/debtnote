@@ -3,14 +3,29 @@ import NavbarTop from '../src/components/NavbarTop.vue'
 import NavbarLeft from '../src/components/NavbarLeft.vue'
 import NavbarBlank from '../src/components/NavbarBlank.vue'
 
-const user = {
-    name: 'Sam',
-    uid: '123'
-}
+import firebase from "firebase/compat/app";
+import 'firebase/compat/auth';
+
+import {useStore} from 'vuex'
+import { computed } from '@vue/reactivity';
+const store = useStore()
+const user = computed(()=> store.getters.getUser)
+
+
+firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+        console.log('User status: ✅')
+    } else {
+        console.log('User status: ❌')
+    }
+})
+
+console.log(user.value)
+
 </script>
 
 <template>
-    <div v-if="user" class="d-flex flex-column flex-md-row">
+    <div v-if="user.uid" class="d-flex flex-column flex-md-row">
         <navbar-top class="d-md-none" />
         <navbar-left class="d-none d-md-block" />
         <router-view/>
@@ -37,7 +52,8 @@ html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-family: "Poppins";
-    background: white;
+    background: $dark;
+    color: white;
 }
 
 a{
@@ -47,5 +63,12 @@ a{
 .white{
     color: white !important;
 }
+.danger{
+    color: $danger !important;
+}
+.success{
+    color: $success !important;
+}
+
 
 </style>

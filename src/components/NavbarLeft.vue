@@ -1,7 +1,7 @@
 
 
 <template>
-    <div id="sidebar" class="containter bg-dark">
+    <div id="sidebar" class="containter bg-black">
         <nav class="nav flex-column">
 
             <router-link to="/" class="d-flex align-items-center justify-content-center m-3">

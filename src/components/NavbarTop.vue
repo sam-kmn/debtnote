@@ -1,5 +1,5 @@
 <template>
-    <nav class="navbar navbar-dark bg-dark">
+    <nav class="navbar navbar-dark bg-black">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <router-link to="/" class="white">

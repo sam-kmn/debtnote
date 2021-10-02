@@ -9,7 +9,7 @@ import 'firebase/compat/auth'
     <div id="sidebar" class="containter bg-black">
         <nav style="height:100%;" class="nav flex-column">
 
-            <router-link style="height: 8%;" to="/" class="d-flex align-items-center justify-content-center p-3">
+            <router-link style="height: 8%;" to="/dash" class="d-flex align-items-center justify-content-center p-3">
                 <img src="../assets/debtnote-icon.png" alt="" width="30" height="30"  class="d-inline-block">
                 <span class="ms-2 white" style="font-size: 1.5rem;">Debtnote</span>
             </router-link>

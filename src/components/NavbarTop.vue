@@ -7,7 +7,7 @@ import 'firebase/compat/auth'
     <nav class="navbar navbar-dark bg-black">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <router-link to="/" class="white">
+                <router-link to="/dash" class="white">
                     <img src="../assets/debtnote-icon.png" alt="" width="30"  class="d-inline-block align-text-top">
                     <span class="ms-2 fw-normal">Debtnote</span>
                 </router-link>

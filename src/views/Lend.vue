@@ -1,41 +1,44 @@
 <script setup>
-import { computed, ref } from '@vue/reactivity'
+import {  ref } from '@vue/reactivity'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/database'
+import 'firebase/compat/auth'
 
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
-import { useStore } from 'vuex'
-const store = useStore()
-const user = computed(()=> store.getters.getUser)
+// import { useStore } from 'vuex'
+// const store = useStore()
+// const user = computed(()=> store.getters.getUser)
 
 const data = ref(null)
 const debters_total = ref({})
 const total = ref(0)
 const loading = ref(true)
 
-if (user.value.name){
-    firebase.database().ref('/users').child(user.value.name).child('lend').on('value', snap => {
-        if (snap.val()) {
-            data.value = snap.val()
-            for (let debter in data.value){
-                
-                let debter_total = 0
-                for (let operation in data.value[debter]){
-                    debter_total += data.value[debter][operation].amount
+
+firebase.auth().onAuthStateChanged(user => {
+    if (user){
+        firebase.database().ref('/users').child(user.displayName).child('lend').on('value', snap => {
+            if (snap.val()) {
+                data.value = snap.val()
+                for (let debter in data.value){
+                    
+                    let debter_total = 0
+                    for (let operation in data.value[debter]){
+                        debter_total += data.value[debter][operation].amount
+                    }
+                    debters_total.value[debter] = debter_total
                 }
-                debters_total.value[debter] = debter_total
+                for (let debter in debters_total.value){
+                    total.value += debters_total.value[debter]
+                }
             }
-            for (let debter in debters_total.value){
-                total.value += debters_total.value[debter]
-            }
-            console.log(debters_total.value)
-            console.log(total.value)
-        }
-        loading.value = false
-    })
-} else router.push('/login')
+            loading.value = false
+        })
+    } else router.push('/login')
+})
+
 
 </script>
 
@@ -53,7 +56,7 @@ if (user.value.name){
         <div v-if="!loading && data" class="container p-5">
             <div class="row align-items-center rounded bg-black mb-3 p-2"><h1 class="m-0">Total lended: {{total}}</h1></div>
             <div class="row bg-black rounded px-2 py-4">
-                <div class="col-12"><h1>Debtors: </h1></div>
+                <div class="col-12"><h1>Money you lent to: </h1></div>
                 <div class="col">
                     <div v-for="total, person in debters_total" :key="person">
                         <div class="spacer my-3"></div>

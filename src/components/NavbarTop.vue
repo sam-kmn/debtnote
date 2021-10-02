@@ -1,3 +1,8 @@
+<script setup>
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/auth'
+</script>
+
 <template>
     <nav class="navbar navbar-dark bg-black">
         <div class="container-fluid">
@@ -17,6 +22,8 @@
                         <i class="bi bi-wallet2"></i>
                         Dash</router-link>
 
+                    <div class="spacer"></div>
+
                     <router-link class="nav-item" to="/borrow">
                         <i class="bi bi-box-arrow-in-left"></i>
                         Borrow</router-link>
@@ -29,9 +36,15 @@
                         <i class="bi bi-people"></i>
                         Friends</router-link>
 
+                    <div class="spacer"></div>
+
                     <router-link class="nav-item" to="/settings">
                         <i class="bi bi-gear"></i>
                         Settings</router-link>
+                    
+                    <a class="nav-item" @click="firebase.auth().signOut()">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Sign Out</a>
                     
                 </div>
             </div>
@@ -41,11 +54,16 @@
 
 <style lang="scss" scoped>
 
+
+
 .nav-item{
-        padding-left: 1rem;
-        font-size: 1.3rem;
-        text-decoration: none;
-        color: white;
+    padding-left: 1rem;
+    font-size: 1.3rem;
+    text-decoration: none;
+    color: white;
+    &:hover{
+        cursor: pointer;
+    }
 }
 
 .router-link-active{

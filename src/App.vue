@@ -8,19 +8,27 @@ import 'firebase/compat/auth';
 
 import {useStore} from 'vuex'
 import { computed } from '@vue/reactivity';
+import { useRouter } from 'vue-router';
 const store = useStore()
 const user = computed(()=> store.getters.getUser)
 
+const router = useRouter()
 
 firebase.auth().onAuthStateChanged(user => {
     if (user) {
         console.log('User status: ✅')
+        if (!user.displayName){
+            console.error('Registration is not complete')
+            router.push('/register')
+        } else store.dispatch('setUser', {name: user.displayName, uid: user.uid} )
+
     } else {
         console.log('User status: ❌')
+        store.dispatch('delUser')
     }
 })
 
-console.log(user.value)
+// console.log(user.value)
 
 </script>
 
@@ -70,5 +78,8 @@ a{
     color: $success !important;
 }
 
+.spacer{
+    border-bottom: .1rem gray solid;
+}
 
 </style>

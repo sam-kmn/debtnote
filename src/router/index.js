@@ -22,26 +22,6 @@ const routes = [
     name: 'Dash',
     component: () => import(/* webpackChunkName: "about" */ '../views/Dash.vue')
   },
-  {
-    path: '/borrow',
-    name: 'Borrow',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Borrow.vue')
-  },
-  {
-    path: '/lend',
-    name: 'Lend',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Lend.vue')
-  },
-  {
-    path: '/friends',
-    name: 'Friends',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Friends.vue')
-  },
-  {
-    path: '/settings',
-    name: 'Settings',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Settings.vue')
-  }
 ]
 
 const router = createRouter({

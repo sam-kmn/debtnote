@@ -23,7 +23,7 @@ import 'firebase/compat/auth'
                         Dash</router-link>
 
                     <div class="spacer"></div>
-
+<!-- 
                     <router-link class="nav-item" to="/borrow">
                         <i class="bi bi-box-arrow-in-left"></i>
                         Borrow</router-link>
@@ -40,7 +40,7 @@ import 'firebase/compat/auth'
 
                     <router-link class="nav-item" to="/settings">
                         <i class="bi bi-gear"></i>
-                        Settings</router-link>
+                        Settings</router-link> -->
                     
                     <a class="nav-item" @click="firebase.auth().signOut()">
                         <i class="bi bi-box-arrow-right"></i>

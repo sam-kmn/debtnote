@@ -22,6 +22,12 @@ const routes = [
     name: 'Dash',
     component: () => import(/* webpackChunkName: "about" */ '../views/Dash.vue')
   },
+  {
+    path: '/note/:id',
+    props: true,
+    name: 'Note',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Note.vue')
+  },
 ]
 
 const router = createRouter({

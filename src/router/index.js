@@ -28,6 +28,11 @@ const routes = [
     name: 'Note',
     component: () => import(/* webpackChunkName: "about" */ '../views/Note.vue')
   },
+  {
+    path: '/create',
+    name: 'Create',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Create.vue')
+  },
 ]
 
 const router = createRouter({

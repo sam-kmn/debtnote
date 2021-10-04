@@ -21,19 +21,53 @@ if(user.value.name){
 
 <template>
     <div class="container">
-        <div v-if="data" class="col-12">
+        <div class="row justify-content-center">
+            <div v-if="data" class="col-12 col-md-7 col-lg-5 pt-3">
 
-            <span class="h1">Your notes</span>
+                <div class="row"><span class="h1">Your notes</span></div>
+                
 
-            <div v-if="data.notes" class="bg-dark rounded py-3">
-                <div class="col-12 ps-4 mb-3" v-for="note, id in data.notes" :key="id" >
-                    <router-link :to="'/note/' + id" class="h5 white">{{note.name}}</router-link>
-                    <div class="spacer"></div>
+                <div v-if="data.notes" class="bg-my rounded py-3 mb-3 overflow-auto" style="max-height: 30rem;">
+                    <div class="col-12 ps-4 mb-3 " v-for="note, id in data.notes" :key="id" >
+                        <router-link :to="'/note/' + id" class="d-flex justify-content-between text-white">
+                            <div class="h4">{{note.name}}</div>
+                            <div v-if="note.type==='private'" class="me-2">
+                                {{Object.keys(note.members).length}}
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                            <div v-if="note.type==='public'">
+                                <span class="badge bg-secondary me-2">Public</span>
+                            </div>
+                        </router-link>
+                        <div class="spacer"></div>
+                    </div>
                 </div>
-            </div>
-            <div v-else class="bg-dark rounded p-2 text-center">
-                <span class="p">You have not created any note yet</span>
+                <div v-else class="bg-dark rounded p-2 text-center">
+                    <span class="p">You have not created any note yet</span>
+                </div>
+                
+                <router-link to="/create" class="fs-5">
+                    <i class="bi bi-plus-square"></i>
+                    Add note
+                </router-link>
+
+                <!-- <div class="row p-2 justify-content-evenly">
+                    <div class="col-3 m-2 bg-my rounded" v-for="note, id in data.notes" :key="id">
+                        <div class="row rounded note-header">{{note.type}}</div>
+                        <router-link :to="'/note/' + id" class="row h4 p-4 overflow-auto white">{{note.name}}</router-link>
+                    </div>
+                </div> -->
+
             </div>
         </div>
     </div>
 </template>
+
+<style lang="scss" scoped>
+.note-header{
+    border-bottom: 1px solid rgb(41, 41, 41);
+    background-color: rgb(19, 19, 19) !important;
+    color: gray;
+    padding-left: .3rem;
+}
+</style>

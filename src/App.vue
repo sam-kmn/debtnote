@@ -19,7 +19,10 @@ firebase.auth().onAuthStateChanged(user => {
         if (!user.displayName){
             console.error('Registration is not complete')
             router.push('/register')
-        } else store.dispatch('setUser', {name: user.displayName, uid: user.uid} )
+        } else {
+            store.dispatch('setUser', {name: user.displayName, uid: user.uid} )
+                .then(router.push('/dash'))
+        }
 
     } else {
         console.log('User status: ❌')
@@ -75,9 +78,12 @@ a{
 .success{
     color: $success !important;
 }
+.bg-my{
+    background-color: #1a1a1a !important;
+}
 
 .spacer{
-    border-bottom: .1rem gray solid;
+    border-bottom: .1rem rgb(61, 61, 61) solid;
 }
 
 </style>

@@ -31,7 +31,7 @@ if(user.value.name){
                     <div class="col-12 ps-4 mb-3 " v-for="note, id in data.notes" :key="id" >
                         <router-link :to="'/note/' + id" class="d-flex justify-content-between text-white">
                             <div class="h4">{{note.name}}</div>
-                            <div v-if="note.type==='private'" class="me-2">
+                            <div v-if="note.type==='private' && note.members" class="me-2">
                                 {{Object.keys(note.members).length}}
                                 <i class="bi bi-people-fill"></i>
                             </div>

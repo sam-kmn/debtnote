@@ -1,24 +1,45 @@
 <script setup>
-import { ref } from '@vue/reactivity'
+import { computed, ref } from '@vue/reactivity'
 
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/database'
 import 'firebase/compat/auth'
+
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+import { useStore } from 'vuex'
+const store = useStore()
+const user = computed(()=> store.getters.getUser)
 
 const private_mode = ref(true)
 
 const fetched_users = ref()
 const auth_users = ref([])
 const input_users = ref()
+const input_name = ref('')
 
 firebase.database().ref('/users').once('value')
     .then(res => fetched_users.value = Object.keys(res.val()))
 
 function grant_permission(){
     if(input_users.value)
-        if(fetched_users.value.includes(input_users.value)) 
+        if(fetched_users.value.includes(input_users.value) && input_users.value != user.value.name) 
             auth_users.value.push(input_users.value)
-    
+}
+
+function createNote(){
+    if(input_name.value){
+        var note_data = {name: input_name.value}
+        if (private_mode.value){
+            note_data.type = 'private'
+            if (auth_users.value.length > 0) note_data.members = auth_users.value
+        } else note_data.type = 'public'
+
+        console.log(note_data)
+        firebase.database().ref(`/users/${user.value.name}/notes`).push(note_data)
+        router.push('/dash')
+    }
 }
 
 </script>
@@ -31,7 +52,7 @@ function grant_permission(){
                 <div class="row h2">Create new note</div>
 
                 <div class="row">
-                    <input type="text" class="bg-my text-white form-control border-dark" placeholder="Name">
+                    <input v-model="input_name" type="text" class="bg-my text-white form-control border-dark" placeholder="Name">
                 </div>
 
                 <div class="row mt-3">
@@ -50,10 +71,18 @@ function grant_permission(){
                             <option v-for="user in fetched_users" :key="user" :value="user" > </option>
                         </datalist>
                     </div>
-                    <div class="row row-cols-2">
-                        <div v-for="user in auth_users" :key="user" class="col">{{user}}</div>
+                    <div class="row mt-2 ">
+                        <div v-for="user, id in auth_users" :key="id" class="col-12 mb-2" @click="auth_users.splice(id,1)">
+                            <i class="bi bi-x danger"></i>
+                            {{user}} 
+                        </div>
                     </div>
                 </div>
+
+                <div class="d-flex mt-3 justify-content-end">
+                    <button class="btn btn-outline-primary rounded-pill" @click="createNote">Create</button>
+                </div>
+
             </div>
         </div>
     </div>

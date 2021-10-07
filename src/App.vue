@@ -82,6 +82,16 @@ a{
     background-color: #1a1a1a !important;
 }
 
+.hover:hover{
+    color: $primary !important;
+}
+.hover-danger:hover{
+    color: $danger !important;
+}
+.hover-success:hover{
+    color: $success !important;
+}
+
 .spacer{
     border-bottom: .1rem rgb(61, 61, 61) solid;
 }

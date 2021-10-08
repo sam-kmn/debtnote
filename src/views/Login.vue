@@ -23,12 +23,12 @@ function signIn(){
             <form @submit.prevent="signIn">
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Email address</label>
-                    <input v-model="emailForm" type="email" class="form-control bg-dark text-light rounded-pill" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    <input v-model="emailForm" type="email" class="form-control bg-my border-dark text-light rounded-pill" id="exampleInputEmail1" aria-describedby="emailHelp">
                     <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Password</label>
-                    <input v-model="passwordForm" type="password" class="form-control bg-dark text-light rounded-pill" id="exampleInputPassword1">
+                    <input v-model="passwordForm" type="password" class="form-control bg-my border-dark text-light rounded-pill" id="exampleInputPassword1">
                 </div>
                 <button type="submit" class="btn btn-outline-light rounded-pill">Log In</button>
             </form>

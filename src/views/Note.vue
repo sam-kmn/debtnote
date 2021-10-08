@@ -1,15 +1,21 @@
 <script setup>
+import DNTable from '../components/DNTable.vue'
+
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/database'
 
 import {computed, defineProps, ref} from 'vue'
-const props = defineProps({id:String})
+const props = defineProps({
+    // user:String,
+    id:String
+    })
 
 import { useStore } from 'vuex'
 const store = useStore()
 const user = computed(()=> store.getters.getUser)
 
 const data = ref()
+const activeTab = ref('out')
 
 const update = ref(false)
 const input_amount = ref(0)
@@ -29,7 +35,7 @@ if(user.value.name){
 
 function addRow(){
     if (input_title.value, input_amount.value)
-        firebase.database().ref(`users/${user.value.name}/notes/${props.id}/operations`).push({
+        firebase.database().ref(`users/${user.value.name}/notes/${props.id}/operations/${activeTab.value}`).push({
             'title': input_title.value,
             'amount': input_amount.value,
             'desc': input_desc.value,
@@ -53,10 +59,27 @@ function addRow(){
 
                 <!-- Navbar -->
                 <div class="row justify-content-between align-items-center">
+
                     <div class="col d-flex align-items-center">
                         <span class="h2 me-2">{{data.name}}</span>
                         <i v-if="data.type==='public'" class="bi bi-unlock fs-3"></i>
                         <i v-if="data.type==='private'" class="bi bi-lock fs-3"></i>
+                    </div>
+
+                    <div class="col">
+                        <nav>
+                            <ul class="pagination pagination-sm m-0">
+
+                                <li class="page-item" :class="{ active: activeTab=='out' }">
+                                    <a @click="activeTab = 'out'" class="page-link" href="#">Out</a>
+                                </li>
+
+                                <li class="page-item" :class="{ active: activeTab=='in' }">
+                                    <a @click="activeTab = 'in'" class="page-link" href="#">In</a>
+                                </li>
+                                
+                            </ul>
+                        </nav>
                     </div>
 
                     <div class="col-auto d-flex gap-3 fs-2">
@@ -64,6 +87,7 @@ function addRow(){
                         <div @click="update=true"><i class="bi bi-plus-circle hover"></i></div>
                         <div><i class="bi bi-gear hover"></i></div>
                     </div>
+
                 </div>
                 
                 <!-- Update (add row) compontent -->
@@ -86,42 +110,26 @@ function addRow(){
                     </div>
                     <div class="col-12 d-flex justify-content-center gap-3 mt-4">
                         <button @click="update=false" class="btn btn-outline-danger rounded-pill">Cancel</button>
-                        <button @click="addRow" class="btn btn-outline-primary rounded-pill">Add entry</button>
+                        <button @click="addRow" class="btn btn-outline-primary rounded-pill">Add row</button>
                     </div>
                 </div>
 
                 <!-- Table -->
-                <div v-else class="row mt-3">
-                    <table v-if="data.operations" class="table table-dark table-hover ">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Date</th>
-                                <th scope="col">Amount</th>
-                                <th scope="col">Title</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="operation, idx, i in data.operations" :key="idx">
-                                <th scope="row">{{i+1}}</th>
-                                <td>{{operation.date}}</td>
-                                <td>{{operation.amount}}</td>
-                                <td>{{operation.title}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div v-else class="col text-center p-5 fs-5">Your debtnote is empty</div>
+                <div v-if="!update && data.operations" class="row mt-3">
+                    <DNTable v-if="activeTab=='out' && data.operations.out" :operations='data.operations.out' />
+                    <DNTable v-if="activeTab=='in' && data.operations.in" :operations='data.operations.in' />    
                 </div>
+                <div v-if="!update && !data.operations" class="col text-center p-5 fs-5">Your debtnote is completely empty</div> 
+            </div>
+            <div v-else class="col-12 col-md-8 col-lg-6 p-3 text-center">
+                <div class="col-12 fs-4">Unable to fetch this debtnote</div>
+                <div class="col-12 fs-6 text-primary">{{props.id}}</div>
+                <img class="col-8 mt-5" src="../assets/404.svg" style="object-fit: cover;"  alt="404 error">
             </div>
         </div>
     </div>
 </template>
 
 <style lang='scss' scoped>
-
-.table-dark{
-    --bs-table-bg: #1a1a1a;
-    border-color: rgb(39, 39, 39);
-}
 
 </style>

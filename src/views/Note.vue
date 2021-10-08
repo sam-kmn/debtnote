@@ -4,7 +4,7 @@ import DNTable from '../components/DNTable.vue'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/database'
 
-import {computed, defineProps, ref, watch} from 'vue'
+import {computed, defineProps, ref} from 'vue'
 const props = defineProps({
     user:String,
     id:String
@@ -28,24 +28,24 @@ let d = new Date()
 input_date.value = d.toISOString().split('T')[0]
 
 firebase.database().ref(`/users/${props.user}/notes/${props.id}`).on('value', snap=> {
-    if (snap.val().type==='public') { data.value = snap.val() }
-    else if (snap.val().type==='private') {
-        if (user.value.name){
-            if ( user.value.name === props.user) { data.value = snap.val() }
-            else {
-                if (snap.val().members){
-                    let members = Object.keys(snap.val().members)
-                    if (members.includes(user.value.name)) { data.value = snap.val() }
-                    else (console.error('You are not allowed to see this note'))
-                } else (console.error('You are not allowed to see this note'))
+    if (snap.val()){
+        if (snap.val().type==='public') { data.value = snap.val() }
+        else if (snap.val().type==='private') {
+            if (user.value.name){
+                if ( user.value.name === props.user) { data.value = snap.val() }
+                else {
+                    if (snap.val().members){
+                        let members = Object.keys(snap.val().members)
+                        if (members.includes(user.value.name)) { data.value = snap.val() }
+                        else (console.error('You are not allowed to see this note'))
+                    } else (console.error('You are not allowed to see this note'))
+                }
             }
         }
-    }
+    } else (console.error('This note does not exists'))
+    loading.value = false
 })
 
-watch(data, ()=> {
-    if (data.value) { loading.value = false }
-})
 
 function addRow(){
     if (input_title.value, input_amount.value)

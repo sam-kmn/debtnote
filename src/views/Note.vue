@@ -6,7 +6,7 @@ import 'firebase/compat/database'
 
 import {computed, defineProps, ref} from 'vue'
 const props = defineProps({
-    // user:String,
+    user:String,
     id:String
     })
 
@@ -26,11 +26,21 @@ const input_date = ref('')
 let d = new Date()
 input_date.value = d.toISOString().split('T')[0]
 
-if(user.value.name){
-    firebase.database().ref(`/users/${user.value.name}/notes/${props.id}`).on('value', snap=> {
-        data.value = snap.val()
-    })
-}
+firebase.database().ref(`/users/${props.user}/notes/${props.id}`).on('value', snap=> {
+    if (snap.val().type==='public') { data.value = snap.val() }
+    else if (snap.val().type==='private') {
+        if (user.value.name){
+            if ( user.value.name === props.user) { data.value = snap.val() }
+            else {
+                if (snap.val().members){
+                    let members = Object.keys(snap.val().members)
+                    if (members.includes(user.value.name)) { data.value = snap.val() }
+                    else (console.error('You are not allowed to see this note'))
+                } else (console.error('You are not allowed to see this note'))
+            }
+        }
+    }
+})
 
 
 function addRow(){

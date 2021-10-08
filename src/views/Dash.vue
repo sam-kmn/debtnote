@@ -29,7 +29,7 @@ if(user.value.name){
 
                 <div v-if="data.notes" class="bg-my rounded py-3 mb-3 overflow-auto" style="max-height: 30rem;">
                     <div class="col-12 ps-4 mb-3 " v-for="note, id in data.notes" :key="id" >
-                        <router-link :to="'/note/' + id" class="d-flex justify-content-between text-white">
+                        <router-link :to="`/note/${user.name}/${id}`" class="d-flex justify-content-between text-white">
                             <div class="h4">{{note.name}}</div>
                             <div v-if="note.type==='private' && note.members" class="me-2">
                                 {{Object.keys(note.members).length}}

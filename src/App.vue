@@ -21,7 +21,7 @@ firebase.auth().onAuthStateChanged(user => {
             router.push('/register')
         } else {
             store.dispatch('setUser', {name: user.displayName, uid: user.uid} )
-                .then(router.push('/dash'))
+                // .then(router.push('/dash'))
         }
 
     } else {

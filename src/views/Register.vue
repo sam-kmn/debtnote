@@ -79,12 +79,12 @@ async function stepTwo(){
                 <form @submit.prevent="stepOne">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email address</label>
-                        <input type="email" v-model="emailForm" class="form-control bg-dark text-light rounded-pill" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <input type="email" v-model="emailForm" class="form-control bg-my border-dark text-light rounded-pill" id="exampleInputEmail1" aria-describedby="emailHelp">
                         <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Password</label>
-                        <input type="password" v-model="passwordForm" class="form-control bg-dark text-light rounded-pill" id="exampleInputPassword1">
+                        <input type="password" v-model="passwordForm" class="form-control bg-my border-dark text-light rounded-pill" id="exampleInputPassword1">
                     </div>
                     <button type="submit" class="btn btn-outline-light rounded-pill">Submit</button>
                 </form>
@@ -106,8 +106,8 @@ async function stepTwo(){
                         <h2 class="text-center">What's your name?</h2>
                     </div>
                     <div class="d-flex justify-content-center align-items-center">
-                        <input @change="verifyUsername" v-model="usernameForm" type="text" class="form-control text-light rounded-pill bg-dark" :class="{danger: !valid}">
-                        <button class="btn btn-dark" type="submit">
+                        <input @change="verifyUsername" v-model="usernameForm" type="text" class="form-control text-light rounded-pill bg-my border-dark" :class="{danger: !valid}">
+                        <button class="btn" type="submit">
                             <i v-if="valid" class="bi bi-check-circle display-6 success"></i>
                             <i v-else class="bi bi-x-circle display-6 danger"></i>
                         </button>

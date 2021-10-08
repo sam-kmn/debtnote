@@ -23,7 +23,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Dash.vue')
   },
   {
-    path: '/note/:id',
+    path: '/note/:user/:id',
     props: true,
     name: 'Note',
     component: () => import(/* webpackChunkName: "about" */ '../views/Note.vue')

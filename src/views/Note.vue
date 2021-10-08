@@ -4,7 +4,7 @@ import DNTable from '../components/DNTable.vue'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/database'
 
-import {computed, defineProps, ref} from 'vue'
+import {computed, defineProps, ref, watch} from 'vue'
 const props = defineProps({
     user:String,
     id:String
@@ -16,6 +16,7 @@ const user = computed(()=> store.getters.getUser)
 
 const data = ref()
 const activeTab = ref('out')
+const loading = ref(true)
 
 const update = ref(false)
 const input_amount = ref(0)
@@ -42,6 +43,9 @@ firebase.database().ref(`/users/${props.user}/notes/${props.id}`).on('value', sn
     }
 })
 
+watch(data, ()=> {
+    if (data.value) { loading.value = false }
+})
 
 function addRow(){
     if (input_title.value, input_amount.value)
@@ -64,7 +68,12 @@ function addRow(){
 
 <template>
     <div class="container">
-        <div class="row justify-content-center ">
+        <div v-if="loading" class="row justify-content-center p-5">
+            <div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div v-else class="row justify-content-center ">
             <div v-if="data" class="col-12 col-md-8 col-lg-6 p-3 ">
 
                 <!-- Navbar -->

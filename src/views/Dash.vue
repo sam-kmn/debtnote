@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from '@vue/reactivity'
+import { watchEffect, computed, ref } from 'vue'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/database'
 
@@ -7,14 +7,20 @@ import { useStore } from 'vuex'
 const store = useStore()
 const user = computed(()=> store.getters.getUser )
 
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
 const data = ref()
 
-if(user.value.name){
-    firebase.database().ref('/users').child(user.value.name).on('value', snap => {
-        data.value = snap.val()
-    })
-
-}
+watchEffect(()=> {
+    if (user.value.name) {
+        firebase.database().ref('/users').child(user.value.name).on('value', snap => {
+            data.value = snap.val()
+        })
+    } else if (user.value.name===null){
+        router.push('/')
+    }
+})
 
 </script>
 
@@ -42,7 +48,7 @@ if(user.value.name){
                         <div class="spacer"></div>
                     </div>
                 </div>
-                <div v-else class="bg-dark rounded p-2 text-center">
+                <div v-else class="bg-my mb-3 rounded p-2 text-center">
                     <span class="p">You have not created any note yet</span>
                 </div>
                 

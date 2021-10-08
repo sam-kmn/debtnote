@@ -138,7 +138,7 @@ function addRow(){
                     <DNTable v-if="activeTab=='out' && data.operations.out" :operations='data.operations.out' />
                     <DNTable v-if="activeTab=='in' && data.operations.in" :operations='data.operations.in' />    
                 </div>
-                <div v-if="!update && !data.operations" class="col text-center p-5 fs-5">Your debtnote is completely empty</div> 
+                <div v-if="!update && !data.operations" class="col text-center p-5 fs-5">This debtnote is completely empty</div> 
             </div>
             <div v-else class="col-12 col-md-8 col-lg-6 p-3 text-center">
                 <div class="col-12 fs-4">Unable to fetch this debtnote</div>

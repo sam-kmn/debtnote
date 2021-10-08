@@ -13,8 +13,8 @@ export default createStore({
         },
         DEL_USER(state){
             state.user = {
-                name: '',
-                uid: '',
+                name: null,
+                uid: null,
             }
         }
     },

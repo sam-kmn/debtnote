@@ -17,6 +17,7 @@ const user = computed(()=> store.getters.getUser)
 const data = ref()
 const activeTab = ref('out')
 const loading = ref(true)
+const error = ref(0)
 
 const update = ref(false)
 const input_amount = ref(0)
@@ -37,12 +38,12 @@ firebase.database().ref(`/users/${props.user}/notes/${props.id}`).on('value', sn
                     if (snap.val().members){
                         let members = Object.keys(snap.val().members)
                         if (members.includes(user.value.name)) { data.value = snap.val() }
-                        else (console.error('You are not allowed to see this note'))
-                    } else (console.error('You are not allowed to see this note'))
+                        else { error.value = 401 }
+                    } else { error.value = 401 }
                 }
-            }
+            } else { error.value = 401 }
         }
-    } else (console.error('This note does not exists'))
+    } else { error.value = 404 }
     loading.value = false
 })
 
@@ -78,13 +79,14 @@ function addRow(){
 
                 <!-- Navbar -->
                 <div class="row justify-content-between align-items-center">
-
+                    <!-- Note name -->
                     <div class="col d-flex align-items-center">
                         <span class="h2 me-2">{{data.name}}</span>
                         <i v-if="data.type==='public'" class="bi bi-unlock fs-3"></i>
                         <i v-if="data.type==='private'" class="bi bi-lock fs-3"></i>
                     </div>
 
+                    <!-- Paginantion out/in -->
                     <div class="col">
                         <nav>
                             <ul class="pagination pagination-sm m-0">
@@ -101,6 +103,7 @@ function addRow(){
                         </nav>
                     </div>
 
+                    <!-- Add / Settings -->
                     <div class="col-auto d-flex gap-3 fs-2">
                         <!-- <div @click="deleteRow"><i class="bi bi-dash-circle hover-danger"></i></div> -->
                         <div @click="update=true"><i class="bi bi-plus-circle hover"></i></div>
@@ -140,10 +143,19 @@ function addRow(){
                 </div>
                 <div v-if="!update && !data.operations" class="col text-center p-5 fs-5">This debtnote is completely empty</div> 
             </div>
+            <!-- Errors -->
             <div v-else class="col-12 col-md-8 col-lg-6 p-3 text-center">
-                <div class="col-12 fs-4">Unable to fetch this debtnote</div>
-                <div class="col-12 fs-6 text-primary">{{props.id}}</div>
-                <img class="col-8 mt-5" src="../assets/404.svg" style="object-fit: cover;"  alt="404 error">
+                <div v-if="error==401">
+                    <div class="col-12 fs-4 fw-bold">This debtnote is private</div>
+                    <div class="col-12 fs-6">You are not authorized to see note</div>
+                    <img class="col-8 mt-5" src="../assets/401.svg" style="object-fit: cover;"  alt="404 error">
+                </div>
+                <div v-if="error==404">
+                    <div class="col-12 fs-4 fw-bold">This debtnote doesn't exists</div>
+                    <div class="col-12 fs-6">Make sure you typed URL right</div>
+                    <img class="col-8 mt-5" src="../assets/404.svg" style="object-fit: cover;"  alt="404 error">
+                </div>
+
             </div>
         </div>
     </div>
@@ -151,4 +163,11 @@ function addRow(){
 
 <style lang='scss' scoped>
 
+.page-link{
+    background-color: #1a1a1a;
+    border-color: #313131;
+}
+.page-item.active .page-link{
+    color: black;
+}
 </style>

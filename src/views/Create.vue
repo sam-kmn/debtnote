@@ -79,7 +79,8 @@ function createNote(){
                     </div>
                 </div>
 
-                <div class="d-flex mt-3 justify-content-end">
+                <div class="d-flex mt-3 gap-3 justify-content-end">
+                    <button class="btn btn-outline-danger rounded-pill" @click="router.push('/dash')">Cancel</button>
                     <button class="btn btn-outline-primary rounded-pill" @click="createNote">Create</button>
                 </div>
 

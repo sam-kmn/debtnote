@@ -64,8 +64,14 @@ function createNote(){
     }
 }
 
-function editNote(){
-    console.log('editNote!')
+function updateNote(){
+    if(input_name.value)
+        firebase.database().ref(`/users/${props.user}/notes/${props.id}`).set({
+            name: input_name.value,
+            type: private_mode.value ? 'private': 'public',
+            members: auth_users.value ?? null })
+            .then(router.push('/dash'))
+            .catch(error => console.log(error))
 }
 
 function deleteNote(){
@@ -141,7 +147,7 @@ function deleteNote(){
                 <div class="d-flex mt-3 gap-3 justify-content-end">
                     <button v-if="data" class="btn btn-outline-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
                     <button class="btn btn-outline-secondary rounded-pill" @click="router.push('/dash')">Cancel</button>
-                    <button v-if="data" class="btn btn-outline-primary rounded-pill" @click="editNote">Save</button>
+                    <button v-if="data" class="btn btn-outline-primary rounded-pill" @click="updateNote">Save</button>
                     <button v-else class="btn btn-outline-primary rounded-pill" @click="createNote">Save</button>
                 </div>
 

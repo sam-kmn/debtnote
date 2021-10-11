@@ -117,7 +117,7 @@ function deleteNote(){
                 </div>
 
                 <!-- Modal -->
-                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div v-if="data" class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content bg-my">
                             <div class="modal-header border-color-grey">

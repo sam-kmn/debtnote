@@ -1,6 +1,7 @@
 <script setup>
 import NoteCreator from '../components/NoteCreator.vue'
 import DNTable from '../components/DNTable.vue'
+import RowDetails from '../components/RowDetails.vue'
 
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/database'
@@ -13,6 +14,7 @@ import { useStore } from 'vuex'
 const store = useStore()
 const user = computed(()=> store.getters.getUser)
 
+const state = computed(()=> store.getters.getNote)
 const data = ref()
 const activePage = ref('out')
 const activeComp = ref('table')
@@ -56,6 +58,11 @@ function addRow(){
             'date': input_date.value})
             .then(()=> activeComp.value = 'table')
             .catch(error => alert(error.message))
+}
+
+function test(event){
+    console.log('rowClick')
+    console.log(event ?? 'none arg')
 }
 
 // function deleteRow(){
@@ -137,7 +144,7 @@ function addRow(){
 
                 <!-- Table -->
                 <div v-if="activeComp==='table' && data.operations" class="row mt-3">
-                    <DNTable v-if="activePage=='out' && data.operations.out" :operations='data.operations.out' />
+                    <DNTable v-if="activePage=='out' && data.operations.out" :operations='data.operations.out'  />
                     <DNTable v-if="activePage=='in' && data.operations.in" :operations='data.operations.in' />    
                 </div>
 
@@ -148,6 +155,11 @@ function addRow(){
                     <NoteCreator :user="props.user" :id="props.id" >
                         Edit this note
                     </NoteCreator>
+                </div>
+
+                <!-- Row -->
+                <div v-if="activeComp==='row'">
+                    <RowDetails />
                 </div>
 
             </div>

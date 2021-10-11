@@ -5,7 +5,11 @@ export default createStore({
         user: {
             name: '',
             uid: '',
+        },
+        note: {
+            activeRow: ''
         }
+
     },
     mutations: {
         SET_USER(state, payload){
@@ -16,6 +20,14 @@ export default createStore({
                 name: null,
                 uid: null,
             }
+        },
+        SET_NOTE(state, payload){
+            state.note = payload
+        },
+        DEL_NOTE(state){
+            state.note = {
+                activeRow: null,
+            }
         }
     },
     actions: {
@@ -24,6 +36,12 @@ export default createStore({
         },
         delUser(state){
             state.commit('DEL_USER')
+        },
+        setNote(state, payload){
+            state.commit('SET_NOTE', payload)
+        },
+        delNote(state){
+            state.commit('DEL_NOTE')
         }
         
     },
@@ -32,6 +50,9 @@ export default createStore({
     getters: {
       getUser(state){
           return state.user
-      }
+      },
+      getNote(state){
+        return state.note
+    }
   }
 })

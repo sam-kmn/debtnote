@@ -1,6 +1,11 @@
 <script setup>
-import {defineProps, ref} from 'vue'
+import {defineProps, ref, } from 'vue'
+import { useStore } from 'vuex'
 const props = defineProps({operations:Object})
+// const emit = defineEmits(['rowClick'])
+
+const store = useStore()
+// const noteState = computed(()=> store.getters.getNote)
 
 const total = ref(0)
 if (props.operations){
@@ -9,6 +14,7 @@ if (props.operations){
         total.value = total.value + amount
     }
 }
+
 
 </script>
 
@@ -27,7 +33,7 @@ if (props.operations){
             </tr>
         </thead>
         <tbody>
-            <tr v-for="operation, idx, i in props.operations" :key="idx">
+            <tr v-for="operation, idx, i in props.operations" :key="idx" @click="store.state.note.activeRow = idx">
                 <th scope="row">{{i+1}}</th>
                 <td>{{operation.date}}</td>
                 <td>{{operation.amount}}</td>

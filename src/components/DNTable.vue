@@ -4,7 +4,6 @@ import { useStore } from 'vuex'
 const props = defineProps({operations:Object})
 
 const store = useStore()
-// const noteState = computed(()=> store.getters.getNote)
 
 const total = ref(0)
 if (props.operations){
@@ -12,6 +11,11 @@ if (props.operations){
         let amount = parseInt(props.operations[operation].amount, 10)
         total.value = total.value + amount
     }
+}
+
+function rowClick(idx){
+    store.state.note.activeRow = idx
+    store.state.note.activeComp = 'row'
 }
 
 
@@ -32,7 +36,7 @@ if (props.operations){
             </tr>
         </thead>
         <tbody>
-            <tr v-for="operation, idx, i in props.operations" :key="idx" @click="store.state.note.activeRow = idx">
+            <tr v-for="operation, idx, i in props.operations" :key="idx" @click="rowClick(idx)">
                 <th scope="row">{{i+1}}</th>
                 <td>{{operation.date}}</td>
                 <td>{{operation.amount}}</td>

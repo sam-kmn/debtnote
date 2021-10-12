@@ -38,11 +38,10 @@ if(props.user && props.id){
             else if (data.value.type === 'private') private_mode.value=true;
             // Members
             if (data.value.members) auth_users.value = Object.values(data.value.members);
-            console.log(data.value.members)
 
         } else console.error('NoteCreator: failed to load data. No data at given path.', `users/${props.user}/notes/${props.id}`);
     })
-} else console.log('NoteCreator: no props passed')
+} // else console.log('NoteCreator: no props passed')
 
 function grant_permission(){
     if(input_users.value)
@@ -58,7 +57,7 @@ function createNote(){
             if (auth_users.value.length > 0) note_data.members = auth_users.value
         } else note_data.type = 'public'
 
-        console.log(note_data)
+        // console.log(note_data)
         firebase.database().ref(`/users/${user.value.name}/notes`).push(note_data)
         router.push('/dash')
     }

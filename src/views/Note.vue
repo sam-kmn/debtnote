@@ -1,5 +1,6 @@
 <script setup>
 import NoteCreator from '../components/NoteCreator.vue'
+import RowCreator from '../components/RowCreator.vue'
 import DNTable from '../components/DNTable.vue'
 import RowDetails from '../components/RowDetails.vue'
 
@@ -20,13 +21,6 @@ const data = ref()
 const loading = ref(true)
 const error = ref(0)
 
-const input_amount = ref(0)
-const input_title = ref('')
-const input_desc = ref('')
-
-const input_date = ref('')
-let d = new Date()
-input_date.value = d.toISOString().split('T')[0]
 
 firebase.database().ref(`/users/${props.user}/notes/${props.id}`).on('value', snap=> {
     if (snap.val()){
@@ -46,18 +40,6 @@ firebase.database().ref(`/users/${props.user}/notes/${props.id}`).on('value', sn
     } else { error.value = 404 }
     loading.value = false
 })
-
-
-function addRow(){
-    if (input_title.value, input_amount.value)
-        firebase.database().ref(`users/${user.value.name}/notes/${props.id}/operations/${state.value.activePage}`).push({
-            'title': input_title.value,
-            'amount': input_amount.value,
-            'desc': input_desc.value,
-            'date': input_date.value})
-            .then(()=> store.state.note.activeComp = 'table')
-            .catch(error => alert(error.message))
-}
 
 
 // function deleteRow(){
@@ -113,30 +95,9 @@ function addRow(){
 
                 </div>
 
-                <!-- {{state}} -->
-                
                 <!-- Update (add row) compontent -->
-                <div v-if="state.activeComp==='update'" class="row mt-3 justify-content-center ">
-                    <div class="col-11 mb-3">
-                        <span class="h3">Title</span>
-                        <input v-model="input_title" type="text" class="form-control bg-my border-dark text-white" maxlength="6" placeholder="Max 6 characters.">
-                    </div>
-                    <div class="col-11 mb-3">
-                        <span class="h3">Description</span>
-                        <input v-model="input_desc" type="text" class="form-control bg-my border-dark text-white" maxlength="30" placeholder="Max 30 characters.">
-                    </div>
-                    <div class="col-6">
-                        <span class="h3">Amount</span>
-                        <input v-model="input_amount" type="text" class="form-control bg-my border-dark text-white" placeholder="Amount">
-                    </div>
-                    <div class="col-5">
-                        <span class="h3">Date</span>
-                        <input v-model="input_date" type="date" class="form-control bg-my border-dark text-white" placeholder="Date">
-                    </div>
-                    <div class="col-12 d-flex justify-content-center gap-3 mt-4">
-                        <button @click="store.state.note.activeComp='table'" class="btn btn-outline-danger rounded-pill">Cancel</button>
-                        <button @click="addRow" class="btn btn-outline-primary rounded-pill">Add row</button>
-                    </div>
+                <div v-if="state.activeComp==='update'" >
+                    <RowCreator :user="props.user" :id="props.id"/>
                 </div>
                 <!-- Table -->
                 <div v-if="state.activeComp==='table' && data.operations" class="row mt-3">
@@ -154,8 +115,8 @@ function addRow(){
                 </div>
 
                 <!-- Row -->
-                <div v-if="state.activeComp==='row'">
-                    <RowDetails />
+                <div v-if="state.activeComp==='row' && state.activeRow">
+                    <RowDetails :user="props.user" :id="props.id" />
                 </div>
 
             </div>

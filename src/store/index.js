@@ -7,6 +7,7 @@ export default createStore({
             uid: '',
         },
         note: {
+            ID: '',
             activeRow: '',
             activePage: 'out',
             activeComp: 'table',
@@ -26,6 +27,7 @@ export default createStore({
 
         resetNote(state){
             state.note = {
+                ID: '',
                 activeRow: '',
                 activePage: 'out',
                 activeComp: 'table',

@@ -14,24 +14,57 @@ import { useStore } from 'vuex'
 const store = useStore()
 const state = computed(()=> store.getters.getNote)
 
-const input_amount = ref(0)
+const input_amount = ref(1)
 const input_title = ref('')
 const input_desc = ref('')
-
 const input_date = ref('')
 let d = new Date()
 input_date.value = d.toISOString().split('T')[0]
 
+if (state.value.activeRow){
+    const rowRef = firebase.database().ref(`users/${props.user}/notes/${props.id}/operations/${state.value.activePage}/${state.value.activeRow}`)
+
+    rowRef.once('value', snap => {
+        if (snap.val()) {
+            let data = snap.val()
+            input_title.value = data.title
+            input_desc.value = data.desc
+            input_amount.value = data.amount
+            input_date.value = data.date
+        }
+        else console.error('RowDetails: Unable to fetch data')
+    })
+}
+
 function addRow(){
     if (input_title.value, input_amount.value)
-        firebase.database().ref(`users/${props.user}/notes/${props.id}/operations/${state.value.activePage}`).push({
+        var rowData = {
             'title': input_title.value,
             'amount': input_amount.value,
             'desc': input_desc.value,
-            'date': input_date.value})
-            .then(()=> store.state.note.activeComp = 'table')
-            .catch(error => alert(error.message))
+            'date': input_date.value
+        }
+        const path = firebase.database().ref(`users/${props.user}/notes/${props.id}/operations/${state.value.activePage}`)
+        if (state.value.activeRow){
+            path.child(state.value.activeRow).set(rowData)
+                .then(()=> store.state.note.activeComp = 'table')
+                .catch(error => alert(error.message))
+        } else {
+            console.log('create new row')
+            console.error('this is not finished yet!');
+        }
 }
+
+function cancel(){
+    let d = new Date()
+    input_title.value = ''
+    input_desc.value = ''
+    input_amount.value = 1
+    input_date.value = d.toISOString().split('T')[0]
+    store.state.note.activeComp='table'
+    store.state.note.activeRow=''
+}
+
 </script>
     
 <template>
@@ -54,7 +87,7 @@ function addRow(){
                 <input v-model="input_date" type="date" class="form-control bg-my border-dark text-white" placeholder="Date">
             </div>
             <div class="col-12 d-flex justify-content-center gap-3 mt-4">
-                <button @click="store.state.note.activeComp='table'" class="btn btn-outline-danger rounded-pill">Cancel</button>
+                <button @click="cancel" class="btn btn-outline-danger rounded-pill">Cancel</button>
                 <button @click="addRow" class="btn btn-outline-primary rounded-pill">Add row</button>
             </div>
         </div>

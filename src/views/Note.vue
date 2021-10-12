@@ -2,7 +2,6 @@
 import NoteCreator from '../components/NoteCreator.vue'
 import RowCreator from '../components/RowCreator.vue'
 import DNTable from '../components/DNTable.vue'
-import RowDetails from '../components/RowDetails.vue'
 
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/database'
@@ -95,10 +94,6 @@ firebase.database().ref(`/users/${props.user}/notes/${props.id}`).on('value', sn
 
                 </div>
 
-                <!-- Update (add row) compontent -->
-                <div v-if="state.activeComp==='update'" >
-                    <RowCreator :user="props.user" :id="props.id"/>
-                </div>
                 <!-- Table -->
                 <div v-if="state.activeComp==='table' && data.operations" class="row mt-3">
                     <DNTable v-if="state.activePage=='out' && data.operations.out" :operations='data.operations.out'  />
@@ -114,9 +109,14 @@ firebase.database().ref(`/users/${props.user}/notes/${props.id}`).on('value', sn
                     </NoteCreator>
                 </div>
 
-                <!-- Row -->
+                <!-- Row Creator -->
+                <div v-if="state.activeComp==='update'" >
+                    <RowCreator :user="props.user" :id="props.id"/>
+                </div>
+
+                <!-- Row Focus -->
                 <div v-if="state.activeComp==='row' && state.activeRow">
-                    <RowDetails :user="props.user" :id="props.id" />
+                    <RowCreator :user="props.user" :id="props.id" />
                 </div>
 
             </div>

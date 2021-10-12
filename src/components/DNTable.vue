@@ -2,7 +2,6 @@
 import {defineProps, ref, } from 'vue'
 import { useStore } from 'vuex'
 const props = defineProps({operations:Object})
-// const emit = defineEmits(['rowClick'])
 
 const store = useStore()
 // const noteState = computed(()=> store.getters.getNote)

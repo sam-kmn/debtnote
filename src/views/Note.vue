@@ -12,12 +12,11 @@ const props = defineProps({ user:String, id:String })
 
 import { useStore } from 'vuex'
 const store = useStore()
+store.commit('resetNote')
 const user = computed(()=> store.getters.getUser)
-
 const state = computed(()=> store.getters.getNote)
+
 const data = ref()
-const activePage = ref('out')
-const activeComp = ref('table')
 const loading = ref(true)
 const error = ref(0)
 
@@ -51,19 +50,15 @@ firebase.database().ref(`/users/${props.user}/notes/${props.id}`).on('value', sn
 
 function addRow(){
     if (input_title.value, input_amount.value)
-        firebase.database().ref(`users/${user.value.name}/notes/${props.id}/operations/${activePage.value}`).push({
+        firebase.database().ref(`users/${user.value.name}/notes/${props.id}/operations/${state.value.activePage}`).push({
             'title': input_title.value,
             'amount': input_amount.value,
             'desc': input_desc.value,
             'date': input_date.value})
-            .then(()=> activeComp.value = 'table')
+            .then(()=> store.state.note.activeComp = 'table')
             .catch(error => alert(error.message))
 }
 
-function test(event){
-    console.log('rowClick')
-    console.log(event ?? 'none arg')
-}
 
 // function deleteRow(){
 //     firebase.database().ref(`users/${user.value.name}/notes/${props.id}/operations/${active_row.value}`).remove()
@@ -97,12 +92,12 @@ function test(event){
                         <nav>
                             <ul class="pagination pagination-sm m-0">
 
-                                <li class="page-item" :class="{ active: activePage=='out' }">
-                                    <a @click="activePage = 'out'" class="page-link" href="#">Out</a>
+                                <li class="page-item" :class="{ active: state.activePage=='out' }">
+                                    <a @click="store.state.note.activePage = 'out'" class="page-link" href="#">Out</a>
                                 </li>
 
-                                <li class="page-item" :class="{ active: activePage=='in' }">
-                                    <a @click="activePage = 'in'" class="page-link" href="#">In</a>
+                                <li class="page-item" :class="{ active: state.activePage=='in' }">
+                                    <a @click="store.state.note.activePage = 'in'" class="page-link" href="#">In</a>
                                 </li>
                                 
                             </ul>
@@ -112,14 +107,16 @@ function test(event){
                     <!-- Add / Settings -->
                     <div class="col-auto d-flex gap-3 fs-2">
                         <!-- <div @click="deleteRow"><i class="bi bi-dash-circle hover-danger"></i></div> -->
-                        <div @click="activeComp='update'"><i class="bi bi-plus-circle hover"></i></div>
-                        <div @click="activeComp='settings'"><i class="bi bi-gear hover"></i></div>
+                        <div @click="store.state.note.activeComp='update'"><i class="bi bi-plus-circle hover"></i></div>
+                        <div @click="store.state.note.activeComp='settings'"><i class="bi bi-gear hover"></i></div>
                     </div>
 
                 </div>
+
+                <!-- {{state}} -->
                 
                 <!-- Update (add row) compontent -->
-                <div v-if="activeComp==='update'" class="row mt-3 justify-content-center ">
+                <div v-if="state.activeComp==='update'" class="row mt-3 justify-content-center ">
                     <div class="col-11 mb-3">
                         <span class="h3">Title</span>
                         <input v-model="input_title" type="text" class="form-control bg-my border-dark text-white" maxlength="6" placeholder="Max 6 characters.">
@@ -137,28 +134,27 @@ function test(event){
                         <input v-model="input_date" type="date" class="form-control bg-my border-dark text-white" placeholder="Date">
                     </div>
                     <div class="col-12 d-flex justify-content-center gap-3 mt-4">
-                        <button @click="activeComp='table'" class="btn btn-outline-danger rounded-pill">Cancel</button>
+                        <button @click="store.state.note.activeComp='table'" class="btn btn-outline-danger rounded-pill">Cancel</button>
                         <button @click="addRow" class="btn btn-outline-primary rounded-pill">Add row</button>
                     </div>
                 </div>
-
                 <!-- Table -->
-                <div v-if="activeComp==='table' && data.operations" class="row mt-3">
-                    <DNTable v-if="activePage=='out' && data.operations.out" :operations='data.operations.out'  />
-                    <DNTable v-if="activePage=='in' && data.operations.in" :operations='data.operations.in' />    
+                <div v-if="state.activeComp==='table' && data.operations" class="row mt-3">
+                    <DNTable v-if="state.activePage=='out' && data.operations.out" :operations='data.operations.out'  />
+                    <DNTable v-if="state.activePage=='in' && data.operations.in" :operations='data.operations.in' />    
                 </div>
 
                 <!-- Empty table -->
-                <div v-if="activeComp==='table' && !data.operations" class="col text-center p-5 fs-5">This debtnote is completely empty</div> 
+                <div v-if="state.activeComp==='table' && !data.operations" class="col text-center p-5 fs-5">This debtnote is completely empty</div> 
 
-                <div v-if="activeComp==='settings'" class="mt-3">
+                <div v-if="state.activeComp==='settings'" class="mt-3">
                     <NoteCreator :user="props.user" :id="props.id" >
                         Edit this note
                     </NoteCreator>
                 </div>
 
                 <!-- Row -->
-                <div v-if="activeComp==='row'">
+                <div v-if="state.activeComp==='row'">
                     <RowDetails />
                 </div>
 

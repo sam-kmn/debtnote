@@ -7,7 +7,9 @@ export default createStore({
             uid: '',
         },
         note: {
-            activeRow: ''
+            activeRow: '',
+            activePage: 'out',
+            activeComp: 'table',
         }
 
     },
@@ -21,14 +23,14 @@ export default createStore({
                 uid: null,
             }
         },
-        SET_NOTE(state, payload){
-            state.note = payload
-        },
-        DEL_NOTE(state){
+
+        resetNote(state){
             state.note = {
-                activeRow: null,
+                activeRow: '',
+                activePage: 'out',
+                activeComp: 'table',
             }
-        }
+        },
     },
     actions: {
         setUser(state, payload){
@@ -37,13 +39,6 @@ export default createStore({
         delUser(state){
             state.commit('DEL_USER')
         },
-        setNote(state, payload){
-            state.commit('SET_NOTE', payload)
-        },
-        delNote(state){
-            state.commit('DEL_NOTE')
-        }
-        
     },
     modules: {
     },

@@ -11,11 +11,13 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const data = ref()
+const loading = ref(true)
 
 watchEffect(()=> {
     if (user.value.name) {
         firebase.database().ref('/users').child(user.value.name).on('value', snap => {
             data.value = snap.val()
+            loading.value = false
         })
     } else if (user.value.name===null){
         router.push('/')
@@ -27,7 +29,12 @@ watchEffect(()=> {
 
 <template>
     <div class="container">
-        <div class="row justify-content-center">
+        <div v-if="loading" class="row justify-content-center p-5">
+            <div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div v-else class="row justify-content-center">
             <div v-if="data" class="col-12 col-md-7 col-lg-5 pt-3">
 
                 <div class="row"><span class="h1">Your notes</span></div>

@@ -143,7 +143,7 @@ function deleteNote(){
                 </div>
 
                 <!-- Buttons -->
-                <div class="d-flex mt-3 gap-3 justify-content-end">
+                <div class="d-flex mt-3 gap-3 justify-content-center">
                     <button v-if="data" class="btn btn-outline-danger rounded-pill" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
                     <button class="btn btn-outline-secondary rounded-pill" @click="router.push('/dash')">Cancel</button>
                     <button v-if="data" class="btn btn-outline-primary rounded-pill" @click="updateNote">Save</button>

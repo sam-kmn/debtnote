@@ -50,8 +50,9 @@ function addRow(){
                 .then(()=> store.state.note.activeComp = 'table')
                 .catch(error => alert(error.message))
         } else {
-            console.log('create new row')
-            console.error('this is not finished yet!');
+            path.push(rowData)
+                .then(()=> store.state.note.activeComp = 'table')
+                .catch(error => alert(error.message))
         }
 }
 
@@ -87,8 +88,11 @@ function cancel(){
                 <input v-model="input_date" type="date" class="form-control bg-my border-dark text-white" placeholder="Date">
             </div>
             <div class="col-12 d-flex justify-content-center gap-3 mt-4">
-                <button @click="cancel" class="btn btn-outline-danger rounded-pill">Cancel</button>
-                <button @click="addRow" class="btn btn-outline-primary rounded-pill">Add row</button>
+                <button @click="cancel" class="btn btn-outline-secondary rounded-pill">Cancel</button>
+                <button @click="addRow" class="btn btn-outline-primary rounded-pill">
+                    <span v-if="state.activeRow">Update</span>
+                    <span v-else>Add</span>
+                </button>
             </div>
         </div>
     </div>

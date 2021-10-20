@@ -56,6 +56,12 @@ function addRow(){
         }
 }
 
+function deleteRow(){
+    firebase.database().ref(`users/${props.user}/notes/${props.id}/operations/${state.value.activePage}/${state.value.activeRow}`).remove()
+        .then(cancel())
+        .catch(err => alert(err))
+}
+
 function cancel(){
     let d = new Date()
     input_title.value = ''
@@ -73,7 +79,7 @@ function cancel(){
         <div class="row mt-3 justify-content-center">
             <div class="col-11 mb-3">
                 <span class="h3">Title</span>
-                <input v-model="input_title" type="text" class="form-control bg-my border-dark text-white" maxlength="6" placeholder="Max 6 characters.">
+                <input v-model="input_title" type="text" class="form-control bg-my border-dark text-white" maxlength="10" placeholder="Max 10 characters.">
             </div>
             <div class="col-11 mb-3">
                 <span class="h3">Description</span>
@@ -89,6 +95,7 @@ function cancel(){
             </div>
             <div class="col-12 d-flex justify-content-center gap-3 mt-4">
                 <button @click="cancel" class="btn btn-outline-secondary rounded-pill">Cancel</button>
+                <button v-if="state.activeRow" @click="deleteRow" class="btn btn-outline-danger rounded-pill">Delete</button>
                 <button @click="addRow" class="btn btn-outline-primary rounded-pill">
                     <span v-if="state.activeRow">Update</span>
                     <span v-else>Add</span>

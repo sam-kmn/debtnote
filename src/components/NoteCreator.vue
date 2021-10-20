@@ -50,6 +50,7 @@ function grant_permission(){
 }
 
 function createNote(){
+    console.log('createNote()')
     if(input_name.value){
         var note_data = {name: input_name.value}
         if (private_mode.value){
@@ -64,8 +65,9 @@ function createNote(){
 }
 
 function updateNote(){
+    console.log('updateNote()')
     if(input_name.value)
-        firebase.database().ref(`/users/${props.user}/notes/${props.id}`).set({
+        firebase.database().ref(`/users/${props.user}/notes/${props.id}`).update({
             name: input_name.value,
             type: private_mode.value ? 'private': 'public',
             members: auth_users.value ?? null })

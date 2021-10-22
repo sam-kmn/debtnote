@@ -22,3 +22,7 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+firebase.json
+.firebaserc
+database.rules.json
+.firebase/hosting.ZGlzdA.cache

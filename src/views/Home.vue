@@ -100,9 +100,11 @@
             </div>
         </section>
         <section>
-            <div class="row">
+            <div class="row justify-content-center">
                 <div class="col-12 col-md-5 p-3 p-md-5">
-                    <span class="h3">FAQ</span>
+                    <div class="row text-center">
+                        <span class="h2">FAQ</span>
+                    </div>
                     <div class="accordion mt-2" id="accordionExample">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
@@ -113,20 +115,23 @@
                             <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     There are two types of note permissions: <br>
-                                    <i class="bi bi-lock"></i><strong> Private mode</strong> - Only you can see your note. <br>  
-                                    <i class="bi bi-unlock"></i><strong> Public mode</strong> - Everyone can read and write.  
+                                    <i class="bi bi-lock"></i><strong> Private mode</strong> - <strong>Only you</strong> can see your note. <br>  
+                                    <i class="bi bi-unlock"></i><strong> Public mode</strong> - <strong>Everyone</strong> can read and write.  
                                 </div>
                             </div>
                         </div>
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingTwo">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                Accordion Item #2
+                                How do I share my note with others?
                             </button>
                             </h2>
                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
-                                    <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                    It's very simple. <br>
+                                    Go to <code>Dash</code> then open your note, copy link and send it. <br>
+                                    If your note is <code>private</code>, make sure you've authorized user. <br>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -207,7 +212,7 @@ watchEffect(()=>{
     }
     .accordion-body{
         padding: 0.8rem;
-        background-color: $dark;
+        background-color: rgb(40, 40, 40);
     }
 }
 

@@ -23,6 +23,7 @@ const usernameForm = ref('')
 firebase.auth().onAuthStateChanged(user => {
     if (user)
         if(user.uid && !user.displayName) step.value = 2;
+        else if(user.uid && user.displayName) router.push('/dash')
     
 })
 

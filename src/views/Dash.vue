@@ -60,36 +60,39 @@ watchEffect(()=> {
         <div v-else class="row justify-content-center">
             <div v-if="userNotes" class="col-11 col-md-8 col-lg-6 col-xl-5">
                 
-                <!-- Header -->
-                <div class="row align-items-center">
-                    <div class="col h1 p-0">Your notes</div>
+                <!-- Your Notes  -->
+                <div class="row my-3">
+                    <!-- Header -->
+                    <div class="row align-items-center">
+                        <div class="col h1 p-0">Your notes</div>
 
-                    <router-link to="/create" class="col fs-5 text-end">
-                        <i class="bi bi-plus-square"></i>
-                        Add note
-                    </router-link>
-
-                </div>
-                
-                <!-- Your Notes -->
-                <div v-if="userNotes.notes" class="row bg-my rounded py-3 mb-3 overflow-auto" style="max-height: 30rem;">
-                    <div class="col-12 ps-4 mb-3 " v-for="note, id in userNotes.notes" :key="id" >
-                        <router-link :to="`/note/${user.name}/${id}`" class="d-flex justify-content-between align-items-center text-white">
-                            <div class="h4">{{note.name}}</div>
-
-                            <div v-if="note.type==='private'">
-                                <i class="bi bi-lock fs-5 me-2"></i>
-                            </div>
-                            <div v-if="note.type==='public'">
-                                <i class="bi bi-unlock fs-5 me-2"></i>
-                            </div>
+                        <router-link to="/create" class="col fs-5 text-end">
+                            <i class="bi bi-plus-square"></i>
+                            Add note
                         </router-link>
-                        <div class="spacer"></div>
+
+                    </div>
+                    <!-- Notes -->
+                    <div v-if="userNotes.notes" class="col-12 p-2 bg-my rounded">
+                        <div v-for="note, id in userNotes.notes" :key="id" class="col p-2">
+                            <router-link :to="`/note/${user.name}/${id}`" class="d-flex justify-content-between align-items-center text-white">
+                                <div class="h4">{{note.name}}</div>
+
+                                <div v-if="note.type==='private'">
+                                    <i class="bi bi-lock fs-5 me-2"></i>
+                                </div>
+                                <div v-if="note.type==='public'">
+                                    <i class="bi bi-unlock fs-5 me-2"></i>
+                                </div>
+                            </router-link>
+                            <div class="spacer"></div>
+                        </div>
+                    </div>
+                    <div v-else class="col-12 p-4 text-center">
+                        You haven't created any note yet
                     </div>
                 </div>
-                <div v-else class="bg-my mb-3 rounded p-3 text-center">
-                    <span class="p">You haven't created any note yet</span>
-                </div>
+
                 
                 <!-- Shared Notes -->
                 <div v-if="sharedNotes" class="row ">
@@ -110,8 +113,6 @@ watchEffect(()=> {
 
                         </div>
                     </div>
-
-                    <!-- {{sharedNotes}} -->
                 </div>
 
 

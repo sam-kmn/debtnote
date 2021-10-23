@@ -10,17 +10,40 @@ const user = computed(()=> store.getters.getUser )
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
-const data = ref()
+const userNotes = ref()
+const sharedNotes = ref({})
 const loading = ref(true)
 
 watchEffect(()=> {
     if (user.value.name) {
         firebase.database().ref('/users').child(user.value.name).on('value', snap => {
-            data.value = snap.val()
+            userNotes.value = snap.val()
             loading.value = false
         })
     } else if (user.value.name===null){
         router.push('/')
+    }
+    if (userNotes.value){
+        if (userNotes.value.shared){
+            let sharedRefs = userNotes.value.shared
+            console.log('sharedRefs:',sharedRefs)
+            for (let ref in sharedRefs){
+                let user = sharedRefs[ref]
+                firebase.database().ref(`/users/${user}/notes/${ref}`).on('value', snap => {
+                    if(snap.val()) {
+                        let data = {
+                            user: user,
+                            name: snap.val().name,
+                            type: snap.val().type
+                        }
+                        sharedNotes.value[ref] = data
+
+                        console.log(sharedNotes.value)
+                    }else console.error(`404: Unable to fetch shared note\nUser: ${user}\nRef: ${ref}`);
+                })
+
+            }
+        }
     }
 })
 
@@ -29,52 +52,68 @@ watchEffect(()=> {
 
 <template>
     <div class="container">
-        <div v-if="loading" class="row justify-content-center p-5">
+        <div v-if="loading" class="row justify-content-center">
             <div class="spinner-border text-light" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
         <div v-else class="row justify-content-center">
-            <div v-if="data" class="col-12 col-md-7 col-lg-5 pt-3">
-
-                <div class="row"><span class="h1">Your notes</span></div>
+            <div v-if="userNotes" class="col-11 col-md-8 col-lg-6 col-xl-5">
                 
+                <!-- Header -->
+                <div class="row align-items-center">
+                    <div class="col h1 p-0">Your notes</div>
 
-                <div v-if="data.notes" class="bg-my rounded py-3 mb-3 overflow-auto" style="max-height: 30rem;">
-                    <div class="col-12 ps-4 mb-3 " v-for="note, id in data.notes" :key="id" >
+                    <router-link to="/create" class="col fs-5 text-end">
+                        <i class="bi bi-plus-square"></i>
+                        Add note
+                    </router-link>
+
+                </div>
+                
+                <!-- Your Notes -->
+                <div v-if="userNotes.notes" class="row bg-my rounded py-3 mb-3 overflow-auto" style="max-height: 30rem;">
+                    <div class="col-12 ps-4 mb-3 " v-for="note, id in userNotes.notes" :key="id" >
                         <router-link :to="`/note/${user.name}/${id}`" class="d-flex justify-content-between align-items-center text-white">
                             <div class="h4">{{note.name}}</div>
-                            <!-- <div v-if="note.type==='private' && note.members" class="me-2">
-                                {{Object.keys(note.members).length}}
-                                <i class="bi bi-people-fill"></i>
-                            </div> -->
+
                             <div v-if="note.type==='private'">
                                 <i class="bi bi-lock fs-5 me-2"></i>
-                                <!-- <span class="badge bg-secondary me-2">Private</span> -->
                             </div>
                             <div v-if="note.type==='public'">
                                 <i class="bi bi-unlock fs-5 me-2"></i>
-                                <!-- <span class="badge bg-secondary me-2">Public</span> -->
                             </div>
                         </router-link>
                         <div class="spacer"></div>
                     </div>
                 </div>
-                <div v-else class="bg-my mb-3 rounded p-2 text-center">
-                    <span class="p">You have not created any note yet</span>
+                <div v-else class="bg-my mb-3 rounded p-3 text-center">
+                    <span class="p">You haven't created any note yet</span>
                 </div>
                 
-                <router-link to="/create" class="fs-5">
-                    <i class="bi bi-plus-square"></i>
-                    Add note
-                </router-link>
+                <!-- Shared Notes -->
+                <div v-if="sharedNotes" class="row ">
+                    <div class="col h2 p-0">Shared notes</div>
+                    <div class="col-12 p-2 bg-my rounded">
+                        <div v-for="note, id in sharedNotes" :key="id" class="col p-2">
+                            <router-link :to="`/note/${note.user}/${id}`" class="d-flex justify-content-between align-items-center text-white">
+                                <div class="h4">{{note.name}}</div>
 
-                <!-- <div class="row p-2 justify-content-evenly">
-                    <div class="col-3 m-2 bg-my rounded" v-for="note, id in data.notes" :key="id">
-                        <div class="row rounded note-header">{{note.type}}</div>
-                        <router-link :to="'/note/' + id" class="row h4 p-4 overflow-auto white">{{note.name}}</router-link>
+                                <div v-if="note.type==='private'">
+                                    <i class="bi bi-lock fs-5 me-2"></i>
+                                </div>
+                                <div v-if="note.type==='public'">
+                                    <i class="bi bi-unlock fs-5 me-2"></i>
+                                </div>
+                            </router-link>
+                            <div class="spacer"></div>
+
+                        </div>
                     </div>
-                </div> -->
+
+                    <!-- {{sharedNotes}} -->
+                </div>
+
 
             </div>
         </div>

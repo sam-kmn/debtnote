@@ -23,7 +23,7 @@ const auth_users = ref([])
 const input_users = ref()
 const input_name = ref('')
 
-firebase.database().ref('/users').once('value')
+firebase.database().ref('users').once('value')
     .then(res => fetched_users.value = Object.keys(res.val()))
 
 if(props.user && props.id){
@@ -50,33 +50,95 @@ function grant_permission(){
 }
 
 function createNote(){
-    console.log('createNote()')
     if(input_name.value){
         var note_data = {name: input_name.value}
         if (private_mode.value){
-            note_data.type = 'private'
-            if (auth_users.value.length > 0) note_data.members = auth_users.value
-        } else note_data.type = 'public'
+            note_data['type'] = 'private'
+            if (auth_users.value.length > 0) note_data['members'] = auth_users.value
+        } else note_data['type'] = 'public'
 
-        // console.log(note_data)
-        firebase.database().ref(`/users/${user.value.name}/notes`).push(note_data)
-        router.push('/dash')
+        firebase.database().ref(`users/${user.value.name}/notes`)
+            .push(note_data)
+            .then(snap => {
+                if (note_data['members']){
+                    for (let member of note_data['members']){
+                        firebase.database().ref(`users/${member}/shared/${snap.key}`).set(user.value.name)
+                    }
+                    router.push('/dash')
+                }
+            })
     }
 }
 
 function updateNote(){
-    console.log('updateNote()')
     if(input_name.value)
-        firebase.database().ref(`/users/${props.user}/notes/${props.id}`).update({
+        var note_data = {
             name: input_name.value,
             type: private_mode.value ? 'private': 'public',
-            members: auth_users.value ?? null })
-            .then(router.push('/dash'))
-            .catch(error => console.log(error))
+            members: auth_users.value ?? null 
+        }
+        firebase.database().ref(`/users/${props.user}/notes/${props.id}`).update(note_data)
+
+        // Test
+        var old_members = data.value.members
+        var new_members = auth_users.value
+        console.log('\n-- New Update --\n\n');
+        console.log('%c data', 'background: #222; color: #4a5cd4', data.value )
+        console.log('%c old members', 'background: #222; color: #4a5cd4', old_members)
+        console.log('%c new members', 'background: #222; color: #4a5cd4', new_members )
+
+        // Add shared to member
+        console.log('%c ADD Module! ', 'background: #222; color: #4ad44a');
+        if (new_members){
+            if (old_members){
+                // If old members isnt none, check if users add has been already added
+                for (let new_member of new_members){
+                    if (!old_members.includes(new_member))
+                        shareNote(user.value.name, new_member, props.id)
+                        console.log('add member : ',new_member)
+
+                }
+            } else {
+                // otherwise, add every one in new_memebers
+                for (let new_member of new_members){
+                    shareNote(user.value.name, new_member, props.id)
+                    console.log('add member : ',new_member)
+                }
+
+            }
+        }
+
+        // Delete shared from member
+        console.log('%c DEL Module! ', 'background: #222; color: #d44a71');
+        if (old_members){
+            if (!new_members){
+                // If there is no members, loop old_members and delete shared data
+                for (let old_member of old_members){
+                    shareNote(user.value.name, old_member, props.id, true)
+                    console.log('delete member : ', old_member)
+                }
+            } else {
+                // otherwise, loop old_members and check if they are not in new_members, delete them
+                for (let old_member of old_members){
+                    if (!new_members.includes(old_member))
+                        shareNote(user.value.name, old_member, props.id, true)
+                        console.log('delete member : ', old_member)
+                }
+            }
+        }
+        // router.push({ path: `/note/${props.user}/${props.id}`})
+        location.reload()
+}
+
+async function shareNote(from, to, id, unshare = false){
+    if (!unshare)
+        await firebase.database().ref(`users/${to}/shared/${id}`).set(from);
+    else
+        await firebase.database().ref(`users/${to}/shared/${id}`).remove()
 }
 
 function deleteNote(){
-    firebase.database().ref(`/users/${props.user}/notes/${props.id}`).remove()
+    firebase.database().ref(`users/${props.user}/notes/${props.id}`).remove()
         .then(()=> router.push('/dash'))
 }
 

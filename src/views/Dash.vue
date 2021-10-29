@@ -49,7 +49,6 @@ watchEffect(()=> {
 
 </script>
 
-
 <template>
     <div class="container">
         <div v-if="loading" class="row justify-content-center">
@@ -93,7 +92,6 @@ watchEffect(()=> {
                     </div>
                 </div>
 
-                
                 <!-- Shared Notes -->
                 <div v-if="sharedNotes" class="row ">
                     <div class="col h2 p-0">Shared notes</div>
@@ -102,12 +100,17 @@ watchEffect(()=> {
                             <router-link :to="`/note/${note.user}/${id}`" class="d-flex justify-content-between align-items-center text-white">
                                 <div class="h4">{{note.name}}</div>
 
-                                <div v-if="note.type==='private'">
-                                    <i class="bi bi-lock fs-5 me-2"></i>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="p">{{note.user}}</div>
+                                    <div v-if="note.type==='private'">
+                                        <i class="bi bi-lock fs-5 me-2"></i>
+                                    </div>
+                                    <div v-if="note.type==='public'">
+                                        <i class="bi bi-unlock fs-5 me-2"></i>
+                                    </div>
                                 </div>
-                                <div v-if="note.type==='public'">
-                                    <i class="bi bi-unlock fs-5 me-2"></i>
-                                </div>
+
+                            
                             </router-link>
                             <div class="spacer"></div>
 

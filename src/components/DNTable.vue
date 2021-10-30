@@ -1,9 +1,11 @@
 <script setup>
-import {defineProps, ref, } from 'vue'
+import {defineProps, ref, computed } from 'vue'
 import { useStore } from 'vuex'
 const props = defineProps({operations:Object})
 
 const store = useStore()
+const state = computed(()=> store.getters.getNote)
+
 
 const total = ref(0)
 if (props.operations){
@@ -30,14 +32,19 @@ function rowClick(idx){
         <thead>
             <tr>
                 <th scope="col">#</th>
+                <th v-if="state.activeType === 'all'" scope="col">Type</th>
                 <th scope="col">Date</th>
                 <th scope="col">Amount</th>
                 <th scope="col">Title</th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="operation, idx, i in props.operations" :key="idx" @click="rowClick(idx)">
+            <tr class="fs-5" v-show="operation.type === state.activeType || state.activeType==='all'" v-for="operation, idx, i in props.operations" :key="idx" @click="rowClick(idx)">
                 <th scope="row">{{i+1}}</th>
+                <td v-if="state.activeType === 'all'">
+                    <i v-if="operation.type === 'in'" class="bi bi-box-arrow-in-left success"></i>
+                    <i v-if="operation.type === 'out'" class="bi bi-box-arrow-right danger"></i>
+                </td>
                 <td>{{operation.date}}</td>
                 <td>{{operation.amount}}</td>
                 <td>{{operation.title}}</td>

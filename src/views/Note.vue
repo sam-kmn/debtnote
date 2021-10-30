@@ -69,17 +69,22 @@ firebase.database().ref(`/users/${props.user}/notes/${props.id}`).on('value', sn
                     </div>
 
                     <!-- Paginantion out/in -->
-                    <div class="col">
+                    <div v-if="state.activeComp != 'update'" class="col">
                         <nav>
                             <ul class="pagination pagination-sm m-0">
 
-                                <li class="page-item" :class="{ active: state.activePage=='out' }">
-                                    <a @click="store.state.note.activePage = 'out'" class="page-link" href="#">Out</a>
+                                <li class="page-item" :class="{ active: state.activeType=='in' }">
+                                    <a @click="store.state.note.activeType = 'in'" class="page-link" href="#">In</a>
                                 </li>
 
-                                <li class="page-item" :class="{ active: state.activePage=='in' }">
-                                    <a @click="store.state.note.activePage = 'in'" class="page-link" href="#">In</a>
+                                <li class="page-item" :class="{ active: state.activeType=='out' }">
+                                    <a @click="store.state.note.activeType = 'out'" class="page-link" href="#">Out</a>
                                 </li>
+
+                                <li class="page-item" :class="{ active: state.activeType=='all' }">
+                                    <a @click="store.state.note.activeType = 'all'" class="page-link" href="#">All</a>
+                                </li>
+
                                 
                             </ul>
                         </nav>
@@ -96,8 +101,8 @@ firebase.database().ref(`/users/${props.user}/notes/${props.id}`).on('value', sn
 
                 <!-- Table -->
                 <div v-if="state.activeComp==='table' && data.operations" class="row mt-3">
-                    <DNTable v-if="state.activePage=='out' && data.operations.out" :operations='data.operations.out'  />
-                    <DNTable v-if="state.activePage=='in' && data.operations.in" :operations='data.operations.in' />    
+                    <DNTable v-if="data.operations" :operations='data.operations'  />
+                    <!-- <DNTable v-if="state.activeType=='in' && data.operations.in" :operations='data.operations.in' />     -->
                 </div>
 
                 <!-- Empty table -->

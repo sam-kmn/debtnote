@@ -9,7 +9,7 @@ export default createStore({
         note: {
             ID: '',
             activeRow: '',
-            activePage: 'out',
+            activeType: 'out',
             activeComp: 'table',
         }
 
@@ -29,7 +29,7 @@ export default createStore({
             state.note = {
                 ID: '',
                 activeRow: '',
-                activePage: 'out',
+                activeType: 'out',
                 activeComp: 'table',
             }
         },

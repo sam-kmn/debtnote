@@ -33,6 +33,15 @@ const routes = [
     name: 'Create',
     component: () => import(/* webpackChunkName: "about" */ '../views/Create.vue')
   },
+  {
+    path: '/error/:code',
+    props: true,
+    name: 'Error',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Error.vue')
+  },
+  {
+    path: '/:pathMatch(.*)*', redirect: '/error/404' 
+  },
 ]
 
 const router = createRouter({

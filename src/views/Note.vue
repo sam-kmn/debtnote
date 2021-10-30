@@ -9,6 +9,8 @@ import 'firebase/compat/database'
 import {computed, defineProps, ref} from 'vue'
 const props = defineProps({ user:String, id:String })
 
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 import { useStore } from 'vuex'
 const store = useStore()
@@ -18,7 +20,6 @@ const state = computed(()=> store.getters.getNote)
 
 const data = ref()
 const loading = ref(true)
-const error = ref(0)
 
 
 firebase.database().ref(`/users/${props.user}/notes/${props.id}`).on('value', snap=> {
@@ -31,20 +32,15 @@ firebase.database().ref(`/users/${props.user}/notes/${props.id}`).on('value', sn
                     if (snap.val().members){
                         let members = Object.values(snap.val().members)
                         if (members.includes(user.value.name)) { data.value = snap.val() }
-                        else { error.value = 401 }
-                    } else { error.value = 401 }
+                        else { router.push('/error/401') }
+                    } else { router.push('/error/401') }
                 }
-            } else { error.value = 401 }
+            } else { router.push('/error/401') }
         }
-    } else { error.value = 404 }
+    } else { router.push('/error/404') }
     loading.value = false
 })
 
-
-// function deleteRow(){
-//     firebase.database().ref(`users/${user.value.name}/notes/${props.id}/operations/${active_row.value}`).remove()
-//         .catch(error => alert(error.message))  
-// }
 
 </script>
 
@@ -122,20 +118,6 @@ firebase.database().ref(`/users/${props.user}/notes/${props.id}`).on('value', sn
                 <!-- Row Focus -->
                 <div v-if="state.activeComp==='row' && state.activeRow">
                     <RowCreator :user="props.user" :id="props.id" />
-                </div>
-
-            </div>
-            <!-- Errors -->
-            <div v-else class="col-12 col-md-8 col-lg-6 p-3 text-center">
-                <div v-if="error==401">
-                    <div class="col-12 fs-4 fw-bold">This debtnote is private</div>
-                    <div class="col-12 fs-6">You are not authorized to see note</div>
-                    <img class="col-8 mt-5" src="../assets/401.svg" style="object-fit: cover;"  alt="404 error">
-                </div>
-                <div v-if="error==404">
-                    <div class="col-12 fs-4 fw-bold">This debtnote doesn't exists</div>
-                    <div class="col-12 fs-6">Make sure you typed URL right</div>
-                    <img class="col-8 mt-5" src="../assets/404.svg" style="object-fit: cover;"  alt="404 error">
                 </div>
 
             </div>

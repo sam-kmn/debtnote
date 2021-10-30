@@ -39,7 +39,7 @@ function rowClick(idx){
             </tr>
         </thead>
         <tbody>
-            <tr class="fs-5" v-show="operation.type === state.activeType || state.activeType==='all'" v-for="operation, idx, i in props.operations" :key="idx" @click="rowClick(idx)">
+            <tr class="" v-show="operation.type === state.activeType || state.activeType==='all'" v-for="operation, idx, i in props.operations" :key="idx" @click="rowClick(idx)">
                 <th scope="row">{{i+1}}</th>
                 <td v-if="state.activeType === 'all'">
                     <i v-if="operation.type === 'in'" class="bi bi-box-arrow-in-left success"></i>

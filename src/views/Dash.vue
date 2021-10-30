@@ -62,10 +62,10 @@ watchEffect(()=> {
                 <!-- Your Notes  -->
                 <div class="row my-3">
                     <!-- Header -->
-                    <div class="row align-items-center">
-                        <div class="col h1 p-0">Your notes</div>
+                    <div class="row align-items-center justify-content-between">
+                        <div class="col h2 p-0">Your notes</div>
 
-                        <router-link to="/create" class="col fs-5 text-end">
+                        <router-link to="/create" class="col h5 p-0 text-end">
                             <i class="bi bi-plus-square"></i>
                             Add note
                         </router-link>
@@ -93,7 +93,7 @@ watchEffect(()=> {
                 </div>
 
                 <!-- Shared Notes -->
-                <div v-if="sharedNotes" class="row ">
+                <div v-if="sharedNotes.length" class="row ">
                     <div class="col h2 p-0">Shared notes</div>
                     <div class="col-12 p-2 bg-my rounded">
                         <div v-for="note, id in sharedNotes" :key="id" class="col p-2">

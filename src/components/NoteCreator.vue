@@ -64,8 +64,8 @@ function createNote(){
                     for (let member of note_data['members']){
                         firebase.database().ref(`users/${member}/shared/${snap.key}`).set(user.value.name)
                     }
-                    router.push('/dash')
                 }
+                router.push('/dash')
             })
     }
 }
@@ -156,7 +156,7 @@ function deleteNote(){
 
                 <!-- Note name -->
                 <div class="row">
-                    <input v-model="input_name" type="text" class="bg-my text-white form-control border-dark" placeholder="Name">
+                    <input v-model="input_name" type="text" class="bg-my text-white form-control border-dark" maxlength="13" placeholder="Name (max 13 characters)">
                 </div>
                 
                 <!-- Private mode switch -->

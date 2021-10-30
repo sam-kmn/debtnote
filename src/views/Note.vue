@@ -62,10 +62,10 @@ firebase.database().ref(`/users/${props.user}/notes/${props.id}`).on('value', sn
                 <!-- Navbar -->
                 <div class="row justify-content-between align-items-center">
                     <!-- Note name -->
-                    <div class="col d-flex align-items-center">
-                        <span class="h2 me-2">{{data.name}}</span>
+                    <div class="col d-flex align-items-center overflow-scroll">
                         <i v-if="data.type==='public'" class="bi bi-unlock fs-3"></i>
                         <i v-if="data.type==='private'" class="bi bi-lock fs-3"></i>
+                        <div class="col h3 m-0 ">{{data.name}}</div>
                     </div>
 
                     <!-- Paginantion out/in -->

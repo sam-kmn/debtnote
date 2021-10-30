@@ -39,7 +39,7 @@ if(props.user && props.id){
             // Members
             if (data.value.members) auth_users.value = Object.values(data.value.members);
 
-        } else console.error('NoteCreator: failed to load data. No data at given path.', `users/${props.user}/notes/${props.id}`);
+        } //else console.error('NoteCreator: failed to load data. No data at given path.', `users/${props.user}/notes/${props.id}`);
     })
 } // else console.log('NoteCreator: no props passed')
 
@@ -79,50 +79,50 @@ function updateNote(){
         }
         firebase.database().ref(`/users/${props.user}/notes/${props.id}`).update(note_data)
 
-        // Test
+        // Update members permisions
         var old_members = data.value.members
         var new_members = auth_users.value
-        console.log('\n-- New Update --\n\n');
-        console.log('%c data', 'background: #222; color: #4a5cd4', data.value )
-        console.log('%c old members', 'background: #222; color: #4a5cd4', old_members)
-        console.log('%c new members', 'background: #222; color: #4a5cd4', new_members )
+        // console.log('\n-- New Update --\n\n');
+        // console.log('%c data', 'background: #222; color: #4a5cd4', data.value )
+        // console.log('%c old members', 'background: #222; color: #4a5cd4', old_members)
+        // console.log('%c new members', 'background: #222; color: #4a5cd4', new_members )
 
         // Add shared to member
-        console.log('%c ADD Module! ', 'background: #222; color: #4ad44a');
+        // console.log('%c ADD Module! ', 'background: #222; color: #4ad44a');
         if (new_members){
             if (old_members){
                 // If old members isnt none, check if users add has been already added
                 for (let new_member of new_members){
                     if (!old_members.includes(new_member))
                         shareNote(user.value.name, new_member, props.id)
-                        console.log('add member : ',new_member)
+                        // console.log('add member : ',new_member)
 
                 }
             } else {
                 // otherwise, add every one in new_memebers
                 for (let new_member of new_members){
                     shareNote(user.value.name, new_member, props.id)
-                    console.log('add member : ',new_member)
+                    // console.log('add member : ',new_member)
                 }
 
             }
         }
 
         // Delete shared from member
-        console.log('%c DEL Module! ', 'background: #222; color: #d44a71');
+        // console.log('%c DEL Module! ', 'background: #222; color: #d44a71');
         if (old_members){
             if (!new_members){
                 // If there is no members, loop old_members and delete shared data
                 for (let old_member of old_members){
                     shareNote(user.value.name, old_member, props.id, true)
-                    console.log('delete member : ', old_member)
+                    // console.log('delete member : ', old_member)
                 }
             } else {
                 // otherwise, loop old_members and check if they are not in new_members, delete them
                 for (let old_member of old_members){
                     if (!new_members.includes(old_member))
                         shareNote(user.value.name, old_member, props.id, true)
-                        console.log('delete member : ', old_member)
+                        // console.log('delete member : ', old_member)
                 }
             }
         }

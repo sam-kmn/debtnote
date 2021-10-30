@@ -26,7 +26,6 @@ watchEffect(()=> {
     if (userNotes.value){
         if (userNotes.value.shared){
             let sharedRefs = userNotes.value.shared
-            // console.log('sharedRefs:',sharedRefs)
             for (let ref in sharedRefs){
                 let user = sharedRefs[ref]
                 firebase.database().ref(`/users/${user}/notes/${ref}`).on('value', snap => {
@@ -37,9 +36,7 @@ watchEffect(()=> {
                             type: snap.val().type
                         }
                         sharedNotes.value[ref] = data
-
-                        // console.log(sharedNotes.value)
-                    }else console.error(`404: Unable to fetch shared note\nUser: ${user}\nRef: ${ref}`);
+                    } else console.error(`404: Unable to fetch shared note\nUser: ${user}\nRef: ${ref}`);
                 })
 
             }
@@ -93,7 +90,7 @@ watchEffect(()=> {
                 </div>
 
                 <!-- Shared Notes -->
-                <div v-if="sharedNotes.length" class="row ">
+                <div v-if="Object.keys(sharedNotes).length" class="row ">
                     <div class="col h2 p-0">Shared notes</div>
                     <div class="col-12 p-2 bg-my rounded">
                         <div v-for="note, id in sharedNotes" :key="id" class="col p-2">

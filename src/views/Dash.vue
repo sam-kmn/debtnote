@@ -17,30 +17,29 @@ const loading = ref(true)
 watchEffect(()=> {
     if (user.value.name) {
         firebase.database().ref('/users').child(user.value.name).on('value', snap => {
-            userNotes.value = snap.val()
+            if(snap.val()){
+                var data = snap.val()
+                if(data.notes) userNotes.value = data.notes;
+                if(data.shared) {
+                    for (let ref in data.shared){
+                        let user = data.shared[ref]
+                        firebase.database().ref(`/users/${user}/notes/${ref}`).on('value', snap => {
+                            if(snap.val()) {
+                                let data = {
+                                    user: user,
+                                    name: snap.val().name,
+                                    type: snap.val().type
+                                }
+                                sharedNotes.value[ref] = data
+                            } else console.error(`404: Unable to fetch shared note\nUser: ${user}\nRef: ${ref}`);
+                        })
+                    }
+                } else sharedNotes.value = {}
+            } else router.push('404')
             loading.value = false
         })
     } else if (user.value.name===null){
         router.push('/')
-    }
-    if (userNotes.value){
-        if (userNotes.value.shared){
-            let sharedRefs = userNotes.value.shared
-            for (let ref in sharedRefs){
-                let user = sharedRefs[ref]
-                firebase.database().ref(`/users/${user}/notes/${ref}`).on('value', snap => {
-                    if(snap.val()) {
-                        let data = {
-                            user: user,
-                            name: snap.val().name,
-                            type: snap.val().type
-                        }
-                        sharedNotes.value[ref] = data
-                    } else console.error(`404: Unable to fetch shared note\nUser: ${user}\nRef: ${ref}`);
-                })
-
-            }
-        }
     }
 })
 
@@ -54,7 +53,7 @@ watchEffect(()=> {
             </div>
         </div>
         <div v-else class="row justify-content-center">
-            <div v-if="userNotes" class="col-11 col-md-8 col-lg-6 col-xl-5">
+            <div class="col-11 col-md-8 col-lg-6 col-xl-5">
                 
                 <!-- Your Notes  -->
                 <div class="row my-3">
@@ -69,8 +68,8 @@ watchEffect(()=> {
 
                     </div>
                     <!-- Notes -->
-                    <div v-if="userNotes.notes" class="col-12 p-2 bg-my rounded">
-                        <div v-for="note, id in userNotes.notes" :key="id" class="col p-2">
+                    <div v-if="userNotes" class="col-12 p-2 bg-my rounded">
+                        <div v-for="note, id in userNotes" :key="id" class="col p-2">
                             <router-link :to="`/note/${user.name}/${id}`" class="d-flex justify-content-between align-items-center text-white">
                                 <div class="h4">{{note.name}}</div>
 

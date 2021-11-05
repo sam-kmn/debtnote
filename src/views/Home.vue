@@ -128,10 +128,38 @@
                             </h2>
                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
-                                    It's very simple. <br>
-                                    Go to <code>Dash</code> then open your note, copy link and send it. <br>
-                                    If your note is <code>private</code>, make sure you've authorized user. <br>
+                                    It's very simple. 
+                                    <br>
+                                    <ul class="position-relative" style="left: 2rem">
+                                        <li> Go to <code>Dash</code> </li>
+                                        <li> Open note you want to share </li>
+                                        <li> Copy link and send it. <br> </li>
+                                    </ul>
+                                    <br>
+                                    <div class="text-warning">Warning!</div>
+
+                                    If your note is <code>private</code>, only users that are registered (and authorized by You), can read and write. <br>
                                     
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                How do I authorize another user?
+                            </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <ul class="position-relative" style="left: 2rem">
+                                        <li> Go to <code>Dash</code> </li>
+                                        <li> Open your note </li>
+                                        <li> Tap on settings button <i class="bi bi-gear"></i> <br> </li>
+                                        <li> In the section <code>Authorized users</code>, write username</li>
+                                        <li> Press <code>Add</code> button to grant permissions to user </li>
+                                        <li> After all, press <code>Save</code> to apply changes</li>
+
+                                    </ul>
                                 </div>
                             </div>
                         </div>

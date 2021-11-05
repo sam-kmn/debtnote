@@ -1,4 +1,5 @@
 <script setup>
+/* eslint no-console: ["error", { allow: ["warn", "error"] }] */
 import NavbarTop from '../src/components/NavbarTop.vue'
 import NavbarBlank from '../src/components/NavbarBlank.vue'
 import { computed } from '@vue/reactivity';
@@ -15,7 +16,7 @@ const router = useRouter()
 
 firebase.auth().onAuthStateChanged(user => {
     if (user) {
-        console.log('User status: ✅')
+        // console.log('User status: ✅')
         if (!user.displayName){
             console.error('Registration is not complete')
             router.push('/register')
@@ -25,7 +26,7 @@ firebase.auth().onAuthStateChanged(user => {
         }
 
     } else {
-        console.log('User status: ❌')
+        // console.log('User status: ❌')
         store.dispatch('delUser')
     }
 })

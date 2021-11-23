@@ -46,16 +46,16 @@ firebase.database().ref(`/users/${props.user}/notes/${props.id}`).on('value', sn
 
 
 <template>
-    <div class="container">
+    <div class="container-fluid">
         <div v-if="loading" class="row justify-content-center p-5">
             <div class="spinner-border text-light" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
         <div v-else class="row justify-content-center ">
-            <div v-if="data" class="col-12 col-md-10 col-lg-7 col-xl-6 p-3">
+            <div v-if="data" class="col-12 col-md-10 col-lg-7 col-xl-6">
 
-                <!-- Navbar -->
+                <!-- Header -->
                 <div class="row justify-content-between align-items-center">
                     <!-- Note name -->
                     <div class="col d-flex align-items-center overflow-scroll">

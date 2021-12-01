@@ -36,7 +36,7 @@ if (state.value.activeRow){
                 amount: data.amount,
                 type: data.type
             }
-        } else console.error('RowDetails: Unable to fetch data');
+        } //else console.error('RowDetails: Unable to fetch data');
     })
 }
 
@@ -77,8 +77,8 @@ function cancel(){
 </script>
     
 <template>
-    <div class="container-fluid p-0">
-        <form class="row mt-5 justify-content-center ">
+    <div class="container-fluid p-0 pt-5">
+        <form @submit.prevent="" class="row justify-content-center ">
             <!-- Title & Type -->
             <div class="col-11 mb-3 d-flex justify-content-between align-items-end">
                 <div class="col-5">
@@ -90,11 +90,11 @@ function cancel(){
                     <span class="h3">Type</span>
                     <div class="d-flex gap-3">
 
-                        <button class="btn  btn-outline-success" @click="input.type='in'" :class="{ 'btn-success': input.type==='in', 'text-white': input.type==='in' }" >
+                        <button type="button" class="btn btn-sm  btn-outline-success d-flex gap-2" @click="input.type='in'" :class="{ 'btn-success': input.type==='in', 'text-white': input.type==='in' }" >
                             In <i class="bi bi-box-arrow-in-left"></i>
                         </button>
 
-                        <button class="btn btn-outline-danger" @click="input.type='out'" :class="{ 'btn-danger': input.type==='out', 'text-white': input.type==='out' }">
+                        <button type="button" class="btn btn-sm btn-outline-danger d-flex gap-2" @click="input.type='out'" :class="{ 'btn-danger': input.type==='out', 'text-white': input.type==='out' }">
                             Out <i class="bi bi-box-arrow-right"></i>
                         </button>
                     </div>

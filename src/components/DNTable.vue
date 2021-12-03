@@ -6,13 +6,19 @@ const props = defineProps({operations:Object})
 const store = useStore()
 const state = computed(()=> store.getters.getNote)
 
+const total = ref({
+    in: 0,
+    out: 0,
+    all: 0,
+})
 
-const total = ref(0)
+// Count total
 if (props.operations){
     for (let operation in props.operations){
         let amount = parseInt(props.operations[operation].amount, 10)
-        total.value = total.value + amount
+        total.value[props.operations[operation].type] += amount
     }
+    total.value.all = total.value.in - total.value.out
 }
 
 function rowClick(idx){
@@ -24,10 +30,24 @@ function rowClick(idx){
 </script>
 
 <template>
-    <!-- <div class="row justify-content-center mb-2">
-        <div class="col-2 p-2 fs-4 bg-my border border-dark">Total</div>
-        <div class="col-2 p-2 fs-4 bg-my border border-dark">{{total}}</div>
-    </div> -->
+
+    <!-- Total row -->
+    <div class="d-flex justify-content-evenly bg-my p-2 border-bottom">
+        <div>
+            <i class="bi bi-box-arrow-in-left success"></i>
+            Incoming: <strong>{{total.in}}</strong>
+        </div>
+        <div>
+            <i class="bi bi-box-arrow-right danger"></i>
+            Outgoing: <strong>{{total.out}}</strong>
+        </div>
+        <div>
+            <i class="bi bi-code-square primary"></i>
+            All: <strong>{{total.all}}</strong>
+        </div>
+    </div>
+
+    <!-- Table -->
     <table v-if="props.operations" class="table table-dark table-hover">
         <thead>
             <tr>

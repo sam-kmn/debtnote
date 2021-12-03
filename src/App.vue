@@ -73,12 +73,16 @@ a{
 .white{
     color: white !important;
 }
+.primary{
+    color: $primary !important;
+}
 .danger{
     color: $danger !important;
 }
 .success{
     color: $success !important;
 }
+
 .bg-my{
     background-color: #1a1a1a !important;
 }

@@ -31,7 +31,7 @@ watchEffect(()=> {
                                     type: snap.val().type
                                 }
                                 sharedNotes.value[ref] = data
-                            } else console.error(`404: Unable to fetch shared note\nUser: ${user}\nRef: ${ref}`);
+                            } //else console.error(`404: Unable to fetch shared note\nUser: ${user}\nRef: ${ref}`);
                         })
                     }
                 } else sharedNotes.value = {}
